@@ -6,6 +6,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "Property 26",
   description: "Find The Perfect Property.",
+  keywords: ["property, real estate, rent, buy"],
 };
 
 export default function RootLayout({ children }) {
