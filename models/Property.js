@@ -83,6 +83,6 @@ const PropertySchema = new Schema({
     timestamps:true
 })
 
-const PropertyModel = models.Property || model('Property',PropertySchema)
+const Property = models.Property || model('Property',PropertySchema)
 
-export default PropertyModel;
+export default Property;

@@ -1,8 +1,20 @@
-import properties from '@/properties.json'
 import PropertyCard from '@/components/PropertyCard'
 
+export const fetchProperties = async()=>{
+  try{
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/properties`);
+    if(!res.ok) throw new Error(`Luthando It Failed To Fetch Data: ${res.status}`);
+    const data = await res.json();
+    return data;
+  }catch(err){
+    console.log(err)
+  }
 
-const Property = () => {
+}
+
+
+const Property = async()=> {
+  const properties = await fetchProperties();
   return (
     <section className="px-4 py-6">
       <div className="container-xl lg:container m-auto px-4 py-6">
@@ -19,4 +31,4 @@ const Property = () => {
   )
 }
 
-export default Property
+export default Property;

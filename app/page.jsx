@@ -6,8 +6,7 @@ import React from 'react'
 
 
 
-const page = async() => {
-  await connectDB()
+const page = () => {
 
   return (
     <>
