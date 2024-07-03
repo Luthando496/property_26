@@ -1,14 +1,14 @@
 import Hero from '@/components/Hero'
 import HomeProperties from '@/components/HomeProperties'
 import InfoBoxes from '@/components/InfoBoxes'
-import Link from 'next/link'
+import { connectDB } from '@/config/database'
 import React from 'react'
 
 
 
-const page = () => {
+const page = async() => {
+  await connectDB()
 
-  console.log(process.env.MONGODB_URI)
   return (
     <>
         <Hero />
