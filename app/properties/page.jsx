@@ -1,16 +1,7 @@
 import PropertyCard from '@/components/PropertyCard'
+import { fetchProperties } from '@/utils/requests';
 
-export const fetchProperties = async()=>{
-  try{
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/properties`);
-    if(!res.ok) throw new Error(`Luthando It Failed To Fetch Data: ${res.status}`);
-    const data = await res.json();
-    return data;
-  }catch(err){
-    console.log(err)
-  }
 
-}
 
 
 const Property = async()=> {
