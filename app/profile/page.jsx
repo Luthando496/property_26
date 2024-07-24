@@ -2,9 +2,10 @@
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import profileDefault from '@/assets/images/profile.png'
-import { useEffect, useState } from 'react'
-import Spinner from '@/components/Spinner'
+import profileDefault from '@/assets/images/profile.png';
+import { useEffect, useState } from 'react';
+import Spinner from '@/components/Spinner';
+import { toast } from 'react-toastify';
 
 
 const page = () => {
@@ -51,12 +52,12 @@ const page = () => {
           /// Remove The property From The State
           const updatedProperty = properties.filter(p=>p._id!==propertyId)
           setProperties(updatedProperty)
-          alert('Property Deleted Successfully')
+          toast.success('Property Deleted Successfully')
         }else{
-          alert('Failed To Delete Property') 
+          toast.error('Failed To Delete Property') 
         }
       }catch(error){
-        alert('Could Not  Delete Property')
+        toast.error('Could Not  Delete Property')
       }
 
     }
