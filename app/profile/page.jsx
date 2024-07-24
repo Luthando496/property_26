@@ -39,7 +39,25 @@ const page = () => {
         if(session?.user?.id) fetchProperties(session?.user?.id)    
     },[session])
 
-    const handleDelete =(propertyId)=>{
+    const handleDelete =async(propertyId)=>{
+      const confirm = window.confirm('Are You Sure You Want To Delete This Property?')
+
+      if(!confirm) return;
+
+      try{
+        const res = await fetch(`/api/properties/${propertyId}`,{method:'DELETE'})
+
+        if(res.status === 200){
+          /// Remove The property From The State
+          const updatedProperty = properties.filter(p=>p._id!==propertyId)
+          setProperties(updatedProperty)
+          alert('Property Deleted Successfully')
+        }else{
+          alert('Failed To Delete Property') 
+        }
+      }catch(error){
+        alert('Could Not  Delete Property')
+      }
 
     }
   return (

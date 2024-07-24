@@ -1,6 +1,6 @@
 import { connectDB } from "@/config/database"
 import Property from "@/models/Property";
-
+import { getSessionUser } from "@/utils/getSessionUser";
 
 
 
@@ -22,3 +22,6 @@ export const GET = async(request,{params})=>{
         return new Response('Something Went Wrong, Or User ID Not Found',{status:500})
      }
 }
+
+
+
