@@ -108,7 +108,23 @@ const PropertyEditForm = () => {
   const handleSubmit = async(e) => {
     e.preventDefault()
     //submit to server
-    console.log('')
+    const formData = new FormData(e.target)
+   
+    try{
+        const res = await fetch(`/api/properties/${id}`,{method:'PUT',body:formData});
+
+        if(res.status === 200){
+          router.push(`/properties/${id}`)
+        }else if(res.status === 401 || res.status === 403){
+          toast.error('Permission Denied For You.')
+        }else{
+          toast.error('Failed To Update Property.')
+        }
+    }catch(error){
+      toast.error('Failed To Updating The Properties')
+      console.error(error)
+
+    }
   }
 
   return (
