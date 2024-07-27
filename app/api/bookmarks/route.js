@@ -3,47 +3,76 @@ import User from '@/models/User'
 import Property from '@/models/Property'
 import { getSessionUser } from '@/utils/getSessionUser';
 
+
 export const dynamic = 'force-dynamic';
 
+// GET /api/bookmarks
+export const GET = async () => {
+  try {
+    await connectDB();
 
-export const POST =async(request)=>{
-    try{
-        await connectDB();
+    const sessionUser = await getSessionUser();
 
-        const {propertyId} = request.json();
-
-        const sessionUser = await getSessionUser();
-        if(!sessionUser ||!sessionUser.userId){
-            return new Response('User Id Is Required',{status:401})
-        }
-        const {userId} = sessionUser;
-
-        // Find User In The Database
-
-        const user = await User.findBy(userId);
-
-        // Check if property is bookmarked
-        let isBookmark = user.bookmarks.includes(propertyId);
-
-        //if already bookmarked we remove it
-
-        let message;
-
-        if(isBookmark){
-            user.bookmarks.pull(propertyId);
-            message = 'Property Removed Successfully';
-            isBookmark = false;
-        }else{
-            user.bookmarks.push(propertyId);
-            message = 'Property Added To Bookmarked Successfully';
-            isBookmark = true;
-        }
-
-        await user.save();
-
-        return new Response(JSON.stringify({message,isBookmark}),{status:200});
-    }catch(err){
-        console.error(err);
-        return new Response('Error Happened During Bookmark',{status:500})
+    if (!sessionUser || !sessionUser.userId) {
+      return new Response('User ID is required', { status: 401 });
     }
-}
+
+    const { userId } = sessionUser;
+
+    // Find user in database
+    const user = await User.findOne({ _id: userId });
+
+    // Get users bookmarks
+    const bookmarks = await Property.find({ _id: { $in: user.bookmarks } });
+
+    return new Response(JSON.stringify(bookmarks), { status: 200 });
+  } catch (error) {
+    console.log(error);
+    return new Response('Something went wrong', { status: 500 });
+  }
+};
+
+export const POST = async (request) => {
+    try {
+      await connectDB();
+  
+      const { propertyId } = await request.json();
+  
+      const sessionUser = await getSessionUser();
+  
+      if (!sessionUser || !sessionUser.userId) {
+        return new Response('User ID is required', { status: 401 });
+      }
+  
+      const { userId } = sessionUser;
+  
+      // Find user in database
+      const user = await User.findOne({ _id: userId });
+  
+      // Check if property is bookmarked
+      let isBookmarked = user.bookmarks.includes(propertyId);
+  
+      let message;
+  
+      if (isBookmarked) {
+        // If already bookmarked, remove it
+        user.bookmarks.pull(propertyId);
+        message = 'Bookmark removed successfully';
+        isBookmarked = false;
+      } else {
+        // If not bookmarked, add it
+        user.bookmarks.push(propertyId);
+        message = 'Bookmark added successfully';
+        isBookmarked = true;
+      }
+  
+      await user.save();
+  
+      return new Response(JSON.stringify({ message, isBookmarked }), {
+        status: 200,
+      });
+    } catch (error) {
+      console.log(error);
+      return new Response('Something went wrong', { status: 500 });
+    }
+  };
